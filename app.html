@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url(bg.jpg);
+            /* background-color: aliceblue; */
+            /* background-position: 100%; */
+            background-size: cover;
+        }
+        #fact {
+            display: none;
+        }
+        .card {
+            background-color: rgb(209, 201, 201);
+        }
+        /* .card-body {
+            background-color: brown;
+        } */
+    </style>
+    <title>Number Facts</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card text-white mt-5 p-4">
+                    <h1>Facts App</h1>
+                    <br>
+                    <!-- <p>Enter a number and get a random fact</p> -->
+                    <input type="number" class="form-control form-control-lg" id="numberInput"
+                        placeholder="Get a number fact...">
+                    <br>
+                    <button type="button" id="year-entry" class="btn btn-success">Get a year fact!!!</button>
+                    <div id="fact" class="card-body" class="animated bounceInUp">
+                        <h4 class="card-title">
+                            Number Fact
+                        </h4>
+                        <p id="factText" class="animated flipInY slow" class="card-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let fact = document.querySelector('#fact')
+        let factText = document.querySelector('#factText')
+        let yearText = document.querySelector('#year-entry')
+        let cardTitle = document.querySelector('.card-title')
+        yearText.addEventListener('click', getYearFact)
+
+
+        let numberInput = document.querySelector('#numberInput')
+        numberInput.addEventListener('input', getFactFetch)
+
+
+        function getFactFetch() {
+            let number = numberInput.value
+
+            if (number != '') {
+                cardTitle.textContent = "Number Fact"
+                fetch('http://numbersapi.com/' + number)
+                    .then(response => response.text())
+                    .then(data => {
+                        fact.style.display = 'block'
+                        factText.innerText = data
+                    })
+                    .catch(err => console.log(err))
+            }
+            else if (number == '') {
+                fact.style.display = 'none'
+                factText.textContent = ""
+            }
+        }
+        var data;
+        function getYearFact() {
+            cardTitle.textContent = "Year Fact"
+            fetch('http://numbersapi.com/random/year')
+                .then(response => response.text())
+                .then(d => {
+                    data = d;
+                    animate()
+                })
+                .catch(err => console.log(err))
+        }
+
+ 
+
+        function animate() {
+            fact.style.display = 'block'
+            factText.classList.add("animated", "flipInX", "slow")
+            factText.innerText = data
+        }
+
+
+
+    </script>
+</body>
+
+</html>
